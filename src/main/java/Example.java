@@ -9,13 +9,13 @@ public class Example {
         try(Database db = fdb.open()) {
 
             db.run(transaction -> {
-                transaction.set(Tuple.from("my_key").pack(), Tuple.from("Hello, World!").pack());
+                transaction.set("my_key".getBytes(), "Hello, World!".getBytes());
                 return null;
             });
 
             String value = db.run(transaction -> {
-                byte[] result = transaction.get(Tuple.from("my_key").pack()).join();
-                return Tuple.fromBytes(result).getString(0);
+                byte[] result = transaction.get("my_key".getBytes()).join();
+                return new String(result);
             });
 
             System.out.println(value);
